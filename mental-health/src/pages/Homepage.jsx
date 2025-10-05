@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import MoodQuestionnaire from '../components/MoodQuestionnaire'
 import FaceEmotionDetector from '../components/FaceEmotionDetector'
-import { isLoggedIn } from '../lib/auth'
 
 export default function Homepage() {
-  const navigate = useNavigate()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [showQuestionnaire, setShowQuestionnaire] = useState(false)
   const [activeTab, setActiveTab] = useState('emotion')
   const [emotionReport, setEmotionReport] = useState(null)
 
-  // Dynamic stats functions
+
   const getDaysTracked = () => {
     const moodData = JSON.parse(localStorage.getItem('moodData') || '[]')
     const uniqueDays = new Set(moodData.map(entry => new Date(entry.date).toDateString())).size
@@ -34,33 +29,7 @@ export default function Homepage() {
     return activityData.length
   }
 
-  // Authentication check
-  useEffect(() => {
-    const checkAuth = () => {
-      const loggedIn = isLoggedIn()
-      setIsAuthenticated(loggedIn)
-      setLoading(false)
-      
-      if (!loggedIn) {
-        navigate('/auth')
-      }
-    }
-
-    checkAuth()
-    
-    // Listen for auth changes
-    const handleAuthChange = () => {
-      checkAuth()
-    }
-    
-    window.addEventListener('auth-changed', handleAuthChange)
-    
-    return () => {
-      window.removeEventListener('auth-changed', handleAuthChange)
-    }
-  }, [navigate])
-
-  if (loading) {
+  if (false) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -71,9 +40,7 @@ export default function Homepage() {
     )
   }
 
-  if (!isAuthenticated) {
-    return null // Will redirect to auth
-  }
+  // Authentication is now handled by ProtectedRoute component
 
   const handleEmotionDetected = (emotion) => {
     const activities = {
@@ -106,7 +73,7 @@ export default function Homepage() {
               </div>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Welcome to Mindful
+              Welcome to MindEase
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
               Your personal mental health companion for tracking, understanding, and improving your wellbeing

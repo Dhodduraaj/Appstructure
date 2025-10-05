@@ -95,13 +95,8 @@ export default function FaceEmotionDetector({ onEmotionDetected, onStopDetection
       window.detectionInterval = null
     }
     
-    // Stop camera stream
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop())
-      setStream(null)
-      setCameraReady(false)
-      setStatus('Camera stopped. Click "Start Detection" to begin again.')
-    }
+    // Don't stop the camera stream, just stop detection
+    setStatus('Detection stopped. Click "Start Detection" to begin again.')
     
     // Calculate most frequent emotion
     setTimeout(() => {

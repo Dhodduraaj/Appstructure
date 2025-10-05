@@ -73,15 +73,16 @@ export default function Appointments() {
       {/* Enhanced Header */}
       <div className="text-center">
         <div className="flex items-center justify-center space-x-3 mb-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center float-animation">
-            <span className="text-white text-xl">📅</span>
+          <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl flex items-center justify-center float-animation shadow-lg">
+            <span className="text-white text-2xl">📅</span>
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-            Book Appointment
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            Doctor Appointments
           </h2>
         </div>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Schedule a session with qualified mental health professionals to support your wellbeing journey.
+        <p className="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
+          Connect with experienced mental health professionals who are here to support your journey towards better mental wellbeing. 
+          Choose from our carefully selected team of psychiatrists and therapists.
         </p>
       </div>
 
@@ -89,10 +90,10 @@ export default function Appointments() {
       <div className="flex justify-center">
         <button
           onClick={() => setShowBooking(true)}
-          className="btn-primary flex items-center space-x-2 text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold flex items-center space-x-3 text-lg px-10 py-4 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
         >
-          <span>➕</span>
-          <span>New Appointment</span>
+          <span className="text-xl">➕</span>
+          <span>Book New Appointment</span>
         </button>
       </div>
 
@@ -117,30 +118,41 @@ export default function Appointments() {
             </div>
 
             {bookingStep === 1 && (
-              <div className="space-y-4">
-                <h4 className="text-lg font-medium">Step 1: Choose Psychiatrist</h4>
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h4 className="text-2xl font-bold text-gray-800 mb-2">Step 1: Choose Your Doctor</h4>
+                  <p className="text-gray-600">Select from our team of experienced mental health professionals</p>
+                </div>
                 <div className="grid gap-4">
                   {psychiatrists.map(psych => (
                     <div
                       key={psych.id}
-                      className={`p-4 border rounded cursor-pointer transition-colors ${
+                      className={`p-6 border-2 rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-105 ${
                         selectedPsychiatrist?.id === psych.id
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-emerald-500 bg-gradient-to-r from-emerald-50 to-teal-50 shadow-lg'
+                          : 'border-gray-200 hover:border-emerald-300 hover:shadow-md bg-white'
                       }`}
                       onClick={() => setSelectedPsychiatrist(psych)}
                     >
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h5 className="font-semibold">{psych.name}</h5>
-                          <p className="text-gray-600">{psych.specialty}</p>
-                          <p className="text-sm text-gray-500">{psych.experience} experience</p>
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center">
+                              <span className="text-white font-bold text-lg">👩‍⚕️</span>
+                            </div>
+                            <div>
+                              <h5 className="font-bold text-lg text-gray-800">{psych.name}</h5>
+                              <p className="text-emerald-600 font-medium">{psych.specialty}</p>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 ml-12">{psych.experience} of experience</p>
                         </div>
                         <div className="text-right">
-                          <div className="flex items-center">
-                            <span className="text-yellow-500">★</span>
-                            <span className="ml-1">{psych.rating}</span>
+                          <div className="flex items-center justify-center space-x-1 mb-2">
+                            <span className="text-yellow-500 text-xl">★</span>
+                            <span className="font-bold text-lg">{psych.rating}</span>
                           </div>
+                          <div className="text-xs text-gray-500">Rating</div>
                         </div>
                       </div>
                     </div>
@@ -149,23 +161,26 @@ export default function Appointments() {
                 <button
                   onClick={() => setBookingStep(2)}
                   disabled={!selectedPsychiatrist}
-                  className="w-full px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+                  className="w-full px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:transform-none disabled:hover:shadow-lg"
                 >
-                  Next: Select Date & Time
+                  Next: Select Date & Time →
                 </button>
               </div>
             )}
 
             {bookingStep === 2 && (
-              <div className="space-y-4">
-                <h4 className="text-lg font-medium">Step 2: Select Date & Time</h4>
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h4 className="text-2xl font-bold text-gray-800 mb-2">Step 2: Select Date & Time</h4>
+                  <p className="text-gray-600">Choose your preferred appointment slot</p>
+                </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Available Dates:</label>
+                  <label className="block text-lg font-semibold text-gray-700 mb-3">📅 Available Dates:</label>
                   <select
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full p-2 border rounded"
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl text-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-300"
                   >
                     <option value="">Select a date</option>
                     {getAvailableDates().map(date => (
@@ -182,16 +197,16 @@ export default function Appointments() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Available Times:</label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <label className="block text-lg font-semibold text-gray-700 mb-3">🕐 Available Times:</label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {timeSlots.map(time => (
                       <button
                         key={time}
                         onClick={() => setSelectedTime(time)}
-                        className={`p-2 border rounded text-sm ${
+                        className={`p-4 border-2 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
                           selectedTime === time
-                            ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-emerald-500 bg-gradient-to-r from-emerald-50 to-teal-50 text-emerald-700 shadow-lg'
+                            : 'border-gray-200 hover:border-emerald-300 hover:shadow-md bg-white'
                         }`}
                       >
                         {time}
@@ -200,19 +215,19 @@ export default function Appointments() {
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                   <button
                     onClick={() => setBookingStep(1)}
-                    className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+                    className="flex-1 px-6 py-4 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-xl transition-all duration-300 transform hover:scale-105"
                   >
-                    Back
+                    ← Back
                   </button>
                   <button
                     onClick={handleBooking}
                     disabled={!selectedDate || !selectedTime}
-                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+                    className="flex-1 px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:transform-none disabled:hover:shadow-lg"
                   >
-                    Confirm Appointment
+                    ✓ Confirm Appointment
                   </button>
                 </div>
               </div>
@@ -221,29 +236,57 @@ export default function Appointments() {
         </div>
       )}
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Your Appointments</h3>
+      {/* Your Appointments Section */}
+      <div className="space-y-6">
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">📋 Your Appointments</h3>
+          <p className="text-gray-600">Manage your scheduled appointments</p>
+        </div>
+        
         {appointments.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            No appointments scheduled
+          <div className="text-center py-12">
+            <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-4xl text-gray-400">📅</span>
+            </div>
+            <h4 className="text-xl font-semibold text-gray-600 mb-2">No appointments scheduled</h4>
+            <p className="text-gray-500">Book your first appointment to get started with professional mental health support.</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid gap-4">
             {appointments.map(appointment => (
-              <div key={appointment.id} className="bg-white rounded shadow p-4">
+              <div key={appointment.id} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-semibold">{appointment.psychiatrist.name}</h4>
-                    <p className="text-gray-600">{appointment.psychiatrist.specialty}</p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
-                    </p>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-3">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">👩‍⚕️</span>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg text-gray-800">{appointment.psychiatrist.name}</h4>
+                        <p className="text-emerald-600 font-medium">{appointment.psychiatrist.specialty}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-4 text-gray-600">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg">📅</span>
+                        <span className="font-medium">{new Date(appointment.date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-lg">🕐</span>
+                        <span className="font-medium">{appointment.time}</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="text-right">
-                    <span className={`px-2 py-1 rounded text-xs ${
+                    <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
                       appointment.status === 'confirmed' 
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-green-100 text-green-800 border border-green-200'
+                        : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
                     }`}>
                       {appointment.status}
                     </span>

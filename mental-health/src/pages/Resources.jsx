@@ -3,17 +3,92 @@ export default function Resources() {
     {
       id: 'dQw4w9WgXcQ',
       title: '5-Minute Breathing Exercise',
-      description: 'Guided breathing for stress relief'
+      description: 'Guided breathing for stress relief',
+      category: 'meditation'
     },
     {
       id: 'inpok4MKVLM',
       title: 'Mindfulness Meditation',
-      description: '10-minute guided meditation'
+      description: '10-minute guided meditation',
+      category: 'meditation'
     },
     {
       id: 'ZToicYcHIOU',
       title: 'Progressive Muscle Relaxation',
-      description: 'Body relaxation technique'
+      description: 'Body relaxation technique',
+      category: 'relaxation'
+    }
+  ]
+
+  const asmrVideos = [
+    {
+      id: 'jfKfPfyJRdk',
+      title: 'ASMR Rain Sounds for Sleep',
+      description: 'Gentle rain sounds for deep relaxation and sleep',
+      duration: '10:00:00'
+    },
+    {
+      id: 'q76bMsUWw2c',
+      title: 'ASMR Ocean Waves',
+      description: 'Calming ocean waves for meditation and focus',
+      duration: '3:00:00'
+    },
+    {
+      id: 'u3dD9YgFzUI',
+      title: 'ASMR Whispered Affirmations',
+      description: 'Soft spoken positive affirmations for self-care',
+      duration: '45:00'
+    },
+    {
+      id: '1ZYbU82GVz4',
+      title: 'ASMR Gentle Hand Movements',
+      description: 'Soothing hand movements and soft sounds',
+      duration: '25:00'
+    },
+    {
+      id: 'rUxyKA_-grg',
+      title: 'ASMR Forest Ambience',
+      description: 'Peaceful forest sounds with birds and wind',
+      duration: '8:00:00'
+    },
+    {
+      id: '6N1I7LhX2eE',
+      title: 'ASMR White Noise',
+      description: 'Soft white noise for concentration and sleep',
+      duration: '11:00:00'
+    }
+  ]
+
+  const relaxingVideos = [
+    {
+      id: 'yIQd2Ya0Ziw',
+      title: 'Peaceful Piano Music',
+      description: 'Beautiful piano melodies for relaxation',
+      duration: '2:00:00'
+    },
+    {
+      id: 'UfcAVejslrU',
+      title: 'Nature Sounds & Soft Music',
+      description: 'Combined nature sounds with gentle music',
+      duration: '3:00:00'
+    },
+    {
+      id: 'L_LUpnjgPso',
+      title: 'Meditation Music for Sleep',
+      description: 'Calming music designed for deep sleep',
+      duration: '8:00:00'
+    },
+    {
+      id: '1o9BwRfHZ8g',
+      title: 'Flowing Water Meditation',
+      description: 'Stream and waterfall sounds for mindfulness',
+      duration: '1:00:00'
+    },
+    {
+      id: '3NycM9lYdWU',
+      title: 'Gentle Guitar & Nature',
+      description: 'Soft guitar with natural soundscapes',
+      duration: '4:00:00'
     }
   ]
 
@@ -95,6 +170,104 @@ export default function Resources() {
         </div>
       </div>
 
+      {/* ASMR Videos Section */}
+      <div className="card p-8">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center float-animation">
+            <span className="text-white text-lg">🎧</span>
+          </div>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            ASMR & Sleep Sounds
+          </h3>
+        </div>
+        <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
+          Gentle sounds and whispered content designed to help you relax, focus, and sleep better.
+        </p>
+        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {asmrVideos.map((video, index) => (
+            <div 
+              key={index} 
+              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-purple-300 transition-all duration-300 interactive-hover animate-slideIn bg-white flex-shrink-0 w-80"
+              style={{animationDelay: `${index * 0.1}s`}}
+            >
+              <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center relative overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                  {video.duration}
+                </div>
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-2xl">▶️</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 bg-white">
+                <h4 className="font-semibold text-gray-800 mb-2 group-hover:text-purple-600 transition-colors">{video.title}</h4>
+                <p className="text-sm text-gray-600 leading-relaxed">{video.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Relaxing Music Videos */}
+      <div className="card p-8">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center float-animation">
+            <span className="text-white text-lg">🎵</span>
+          </div>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            Relaxing Music & Nature Sounds
+          </h3>
+        </div>
+        <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
+          Peaceful music and natural soundscapes to help you unwind and find inner calm.
+        </p>
+        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {relaxingVideos.map((video, index) => (
+            <div 
+              key={index} 
+              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-blue-300 transition-all duration-300 interactive-hover animate-slideIn bg-white flex-shrink-0 w-80"
+              style={{animationDelay: `${index * 0.1}s`}}
+            >
+              <div className="aspect-video bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center relative overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                  {video.duration}
+                </div>
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-2xl">▶️</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 bg-white">
+                <h4 className="font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">{video.title}</h4>
+                <p className="text-sm text-gray-600 leading-relaxed">{video.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Enhanced Relaxation Videos */}
       <div className="card p-8">
         <div className="flex items-center space-x-3 mb-6">
@@ -102,29 +275,35 @@ export default function Resources() {
             <span className="text-white text-lg">🎥</span>
           </div>
           <h3 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
-            Relaxation Videos
+            Guided Relaxation & Meditation
           </h3>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
+          Professional guided sessions to help you practice mindfulness and relaxation techniques.
+        </p>
+        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {videos.map((video, index) => (
             <div 
               key={index} 
-              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-pink-300 transition-all duration-300 interactive-hover animate-slideIn"
+              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-pink-300 transition-all duration-300 interactive-hover animate-slideIn bg-white flex-shrink-0 w-80"
               style={{animationDelay: `${index * 0.1}s`}}
             >
-              <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center relative overflow-hidden">
+              <div className="aspect-video bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center relative overflow-hidden">
                 <iframe
                   width="100%"
                   height="100%"
-                  src={`https://www.youtube.com/embed/${video.id}`}
+                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
                   title={video.title}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center">
+                <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded">
+                  {video.category}
+                </div>
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-2xl">▶️</span>
                   </div>
                 </div>

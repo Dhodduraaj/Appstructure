@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 export default function Activities() {
   const [activeGame, setActiveGame] = useState(null)
@@ -15,34 +15,48 @@ export default function Activities() {
       id: 'bubble-wrap',
       title: 'Virtual Bubble Wrap',
       description: 'Pop virtual bubbles to relieve stress',
-      component: BubbleWrapGame
+      icon: '🫧'
     },
     {
       id: 'breathing',
       title: 'Guided Breathing',
       description: 'Interactive breathing exercise',
-      component: BreathingGame
+      icon: '🫁'
     },
     {
       id: 'coloring',
       title: 'Digital Coloring',
       description: 'Relaxing coloring activity',
-      component: ColoringGame
+      icon: '🎨'
     },
     {
       id: 'meditation',
       title: 'Mindfulness Timer',
       description: 'Guided meditation timer',
-      component: MeditationTimer
+      icon: '🧘'
     }
   ]
+
+  const handleGameClick = (gameId) => {
+    setActiveGame(gameId)
+  }
 
   const renderGame = (gameId) => {
     const game = stressGames.find(g => g.id === gameId)
     if (!game) return null
     
-    const GameComponent = game.component
-    return <GameComponent onClose={() => setActiveGame(null)} />
+    switch (gameId) {
+      case 'bubble-wrap':
+        return <BubbleWrapGame onClose={() => setActiveGame(null)} />
+      case 'breathing':
+        return <BreathingGame onClose={() => setActiveGame(null)} />
+      case 'coloring':
+        return <ColoringGame onClose={() => setActiveGame(null)} />
+      case 'meditation':
+        return <MeditationTimer onClose={() => setActiveGame(null)} />
+      default:
+        return null
+    }
   }
 
   return (
@@ -77,16 +91,12 @@ export default function Activities() {
             <div 
               key={game.id} 
               className="group p-6 bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 border-2 border-transparent hover:border-blue-200 rounded-2xl cursor-pointer transition-all duration-300 interactive-hover animate-slideIn"
-              onClick={() => setActiveGame(game.id)}
+              onClick={() => handleGameClick(game.id)}
               style={{animationDelay: `${index * 0.1}s`}}
             >
               <div className="flex items-center space-x-3 mb-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-white text-lg">
-                    {game.id === 'bubble-wrap' ? '🫧' : 
-                     game.id === 'breathing' ? '🫁' : 
-                     game.id === 'coloring' ? '🎨' : '🧘'}
-                  </span>
+                  <span className="text-white text-lg">{game.icon}</span>
                 </div>
                 <h4 className="font-bold text-gray-800 group-hover:text-blue-700">{game.title}</h4>
               </div>
@@ -127,7 +137,7 @@ export default function Activities() {
         </div>
       </div>
 
-      {/* Enhanced Game Modal */}
+      {/* Game Modal */}
       {activeGame && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
           <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl transform animate-slideUp">
@@ -234,68 +244,73 @@ function BreathingGame({ onClose }) {
   const [isActive, setIsActive] = useState(false)
   const [phase, setPhase] = useState('inhale')
   const [count, setCount] = useState(4)
+  const [cycle, setCycle] = useState(0)
+
+  useEffect(() => {
+    if (!isActive) return
+
+    const interval = setInterval(() => {
+      setCount(prev => {
+        if (prev === 1) {
+          if (phase === 'inhale') {
+            setPhase('hold')
+            return 7
+          } else if (phase === 'hold') {
+            setPhase('exhale')
+            return 8
+          } else {
+            setPhase('inhale')
+            setCycle(prev => prev + 1)
+            return 4
+          }
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [isActive, phase])
 
   const startBreathing = () => {
     setIsActive(true)
     setPhase('inhale')
     setCount(4)
-    
-    const cycle = () => {
-      // Inhale for 4 seconds
-      setPhase('inhale')
-      setCount(4)
-      setTimeout(() => {
-        // Hold for 4 seconds
-        setPhase('hold')
-        setCount(4)
-        setTimeout(() => {
-          // Exhale for 4 seconds
-          setPhase('exhale')
-          setCount(4)
-          setTimeout(() => {
-            if (isActive) cycle()
-          }, 4000)
-        }, 4000)
-      }, 4000)
-    }
-    
-    cycle()
+    setCycle(0)
   }
 
   const stopBreathing = () => {
     setIsActive(false)
-    setPhase('ready')
-    setCount(0)
+    setPhase('inhale')
+    setCount(4)
+    setCycle(0)
   }
 
   return (
     <div className="space-y-6 text-center">
-      <h4 className="text-lg font-semibold">Guided Breathing Exercise</h4>
+      <div>
+        <h4 className="text-lg font-semibold">4-7-8 Breathing Exercise</h4>
+        <p className="text-gray-600">Follow the guided breathing pattern</p>
+      </div>
       
-      <div className="relative w-64 h-64 mx-auto">
-        <div className={`absolute inset-0 rounded-full transition-all duration-1000 ${
-          phase === 'inhale' ? 'bg-blue-400 scale-110' :
-          phase === 'hold' ? 'bg-green-400 scale-125' :
-          phase === 'exhale' ? 'bg-purple-400 scale-100' :
-          'bg-gray-300 scale-100'
-        }`} />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-white text-6xl font-bold">{count}</div>
+      <div className="relative">
+        <div className={`w-32 h-32 mx-auto rounded-full flex items-center justify-center text-white font-bold text-xl transition-all duration-1000 ${
+          phase === 'inhale' ? 'bg-green-500 scale-110' :
+          phase === 'hold' ? 'bg-yellow-500 scale-125' :
+          'bg-blue-500 scale-100'
+        }`}>
+          {count}
+        </div>
+        <div className="mt-4">
+          <p className="text-lg font-medium capitalize">{phase}</p>
+          <p className="text-sm text-gray-600">Cycle: {cycle}</p>
         </div>
       </div>
       
-      <div className="text-lg font-medium">
-        {phase === 'inhale' && 'Breathe In...'}
-        {phase === 'hold' && 'Hold...'}
-        {phase === 'exhale' && 'Breathe Out...'}
-        {phase === 'ready' && 'Ready to start'}
-      </div>
-      
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-2">
         {!isActive ? (
           <button
             onClick={startBreathing}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             Start Breathing
           </button>

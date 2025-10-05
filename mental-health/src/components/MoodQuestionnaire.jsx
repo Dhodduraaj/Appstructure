@@ -76,7 +76,7 @@ export default function MoodQuestionnaire({ onSubmit }) {
   }
 
   const nextQuestion = () => {
-    if (currentQuestion < questions.length - 1) {
+    if (currentQuestion < questions.length ) {
       setCurrentQuestion(prev => prev + 1)
     } else {
       // After 10 questions, show face tracking

@@ -8,7 +8,7 @@ export default function Therapy() {
   const [apiError, setApiError] = useState('')
 
   // Initialize Gemini AI with proper error handling
-  const API_KEY = 'AIzaSyDBF7eW-9xRzm8MHX6rx8ZLHeC9O7WFzlk'
+  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY 
   const genAI = new GoogleGenerativeAI(API_KEY)
   const model = genAI.getGenerativeModel({ 
     model: 'gemini-1.5-flash',
@@ -50,6 +50,10 @@ export default function Therapy() {
 
   async function send() {
     if (!input.trim()) return
+    if (!API_KEY) {
+      setApiError('Missing Gemini API key. Set VITE_GEMINI_API_KEY in .env')
+      return
+    }
     
     const userMsg = { role: 'user', content: input }
     setMessages((m) => [...m, userMsg])

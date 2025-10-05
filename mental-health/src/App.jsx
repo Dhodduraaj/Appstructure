@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom'
 import Resources from './pages/Resources'
 import Therapy from './pages/Therapy'
 import Activities from './pages/Activities'
@@ -27,7 +27,25 @@ function Layout({ children }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800 relative overflow-hidden">
+      {/* Soothing Background Pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)`,
+          backgroundSize: '400px 400px, 600px 600px, 800px 800px',
+          animation: 'float 20s ease-in-out infinite'
+        }}></div>
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          animation: 'drift 30s linear infinite'
+        }}></div>
+        <div className="absolute inset-0 opacity-15" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23059669' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='m0 40l40-40h-40v40zm40 0v-40h-40l40 40z'/%3E%3C/g%3E%3C/svg%3E")`,
+          animation: 'drift 25s linear infinite reverse'
+        }}></div>
+      </div>
       {/* Enhanced Header with smooth animations */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
@@ -41,7 +59,7 @@ function Layout({ children }) {
               <span className="text-white font-bold text-lg">M</span>
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Mindful
+              MindEase
             </h1>
           </div>
           
@@ -154,17 +172,59 @@ function Layout({ children }) {
 
  
 
+// Protected Route Component
+function ProtectedRoute({ children }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const loggedIn = isLoggedIn()
+      setIsAuthenticated(loggedIn)
+      setLoading(false)
+    }
+
+    checkAuth()
+    
+    // Listen for auth changes
+    const handleAuthChange = () => {
+      checkAuth()
+    }
+    
+    window.addEventListener('auth-changed', handleAuthChange)
+    
+    return () => {
+      window.removeEventListener('auth-changed', handleAuthChange)
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <span className="text-white text-2xl">🧠</span>
+          </div>
+          <p className="text-gray-600">Loading MindEase...</p>
+        </div>
+      </div>
+    )
+  }
+
+  return isAuthenticated ? children : <Navigate to="/auth" replace />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Homepage/>} />
-          <Route path="/appointments" element={<Appointments/>} />
-          <Route path="/resources" element={<Resources/>} />
-          <Route path="/therapy" element={<Therapy/>} />
-          <Route path="/activities" element={<Activities/>} />
           <Route path="/auth" element={<Auth/>} />
+          <Route path="/" element={<ProtectedRoute><Homepage/></ProtectedRoute>} />
+          <Route path="/appointments" element={<ProtectedRoute><Appointments/></ProtectedRoute>} />
+          <Route path="/resources" element={<ProtectedRoute><Resources/></ProtectedRoute>} />
+          <Route path="/therapy" element={<ProtectedRoute><Therapy/></ProtectedRoute>} />
+          <Route path="/activities" element={<ProtectedRoute><Activities/></ProtectedRoute>} />
         </Routes>
       </Layout>
     </BrowserRouter>
