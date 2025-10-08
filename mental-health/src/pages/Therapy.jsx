@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { chatApi } from '../lib/api'
 
 export default function Therapy() {
   const [input, setInput] = useState('')
@@ -7,36 +7,7 @@ export default function Therapy() {
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState('')
 
-  // Initialize Gemini AI with proper error handling
-  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY 
-  const genAI = new GoogleGenerativeAI(API_KEY)
-  const model = genAI.getGenerativeModel({ 
-    model: 'gemini-1.5-flash',
-    generationConfig: {
-      temperature: 0.7,
-      topK: 40,
-      topP: 0.95,
-      maxOutputTokens: 1024,
-    },
-    safetySettings: [
-      {
-        category: "HARM_CATEGORY_HARASSMENT",
-        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-      },
-      {
-        category: "HARM_CATEGORY_HATE_SPEECH",
-        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-      },
-      {
-        category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-      },
-      {
-        category: "HARM_CATEGORY_DANGEROUS_CONTENT",
-        threshold: "BLOCK_MEDIUM_AND_ABOVE"
-      }
-    ]
-  })
+  // Backend chat API is used for responses
 
   // Add welcome message
   useEffect(() => {
@@ -50,10 +21,6 @@ export default function Therapy() {
 
   async function send() {
     if (!input.trim()) return
-    if (!API_KEY) {
-      setApiError('Missing Gemini API key. Set VITE_GEMINI_API_KEY in .env')
-      return
-    }
     
     const userMsg = { role: 'user', content: input }
     setMessages((m) => [...m, userMsg])
@@ -62,38 +29,11 @@ export default function Therapy() {
     setApiError('')
     
     try {
-      // Build conversation context
-      const conversationHistory = messages.map(msg => 
-        `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
-      ).join('\n')
-      
-      const prompt = `You are a compassionate mental health support assistant. You provide CBT-style therapy and emotional support. 
-
-Guidelines:
-- Be empathetic, non-judgmental, and supportive
-- Keep responses concise (2-3 sentences)
-- Focus on active listening and validation
-- Offer gentle coping strategies
-- Encourage professional help when appropriate
-- Use a warm, understanding tone
-
-Previous conversation:
-${conversationHistory}
-
-Current user message: ${userMsg.content}
-
-Please respond as a supportive mental health assistant:`
-      
-      console.log('Sending request to Gemini API...')
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      const text = response.text()
-      
-      console.log('Gemini response:', text)
-      setMessages((m) => [...m, { role: 'assistant', content: text }])
+      const { reply } = await chatApi.send(userMsg.content)
+      setMessages((m) => [...m, { role: 'assistant', content: reply }])
       
     } catch (error) {
-      console.error('Gemini API error:', error)
+      console.error('Chat API error:', error)
       setApiError(`API Error: ${error.message}`)
       
       // Fallback responses based on user input

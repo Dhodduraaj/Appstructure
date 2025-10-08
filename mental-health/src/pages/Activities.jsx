@@ -183,11 +183,31 @@ function BubbleWrapGame({ onClose }) {
   const [bubbles, setBubbles] = useState(Array.from({ length: 50 }, (_, i) => ({ id: i, popped: false })))
   const [score, setScore] = useState(0)
 
+  // Create pop sound using Web Audio API
+  const playPopSound = () => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)()
+    const oscillator = audioContext.createOscillator()
+    const gainNode = audioContext.createGain()
+    
+    oscillator.connect(gainNode)
+    gainNode.connect(audioContext.destination)
+    
+    oscillator.frequency.value = 800
+    oscillator.type = 'sine'
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1)
+    
+    oscillator.start(audioContext.currentTime)
+    oscillator.stop(audioContext.currentTime + 0.1)
+  }
+
   const popBubble = (id) => {
     setBubbles(prev => prev.map(bubble => 
       bubble.id === id ? { ...bubble, popped: true } : bubble
     ))
     setScore(prev => prev + 1)
+    playPopSound()
   }
 
   const resetGame = () => {

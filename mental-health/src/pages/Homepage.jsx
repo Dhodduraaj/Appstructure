@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MoodQuestionnaire from '../components/MoodQuestionnaire'
 import FaceEmotionDetector from '../components/FaceEmotionDetector'
+import FaceEmotionDetectorSimple from '../components/FaceEmotionDetectorSimple'
 
 export default function Homepage() {
+  const navigate = useNavigate()
   const [showQuestionnaire, setShowQuestionnaire] = useState(false)
   const [activeTab, setActiveTab] = useState('emotion')
   const [emotionReport, setEmotionReport] = useState(null)
@@ -86,17 +89,6 @@ export default function Homepage() {
                 <span>📋</span>
                 <span>Take Mood Assessment</span>
               </button>
-              <button
-                onClick={() => setActiveTab('emotion')}
-                className={`flex items-center justify-center space-x-2 text-lg px-8 py-4 rounded-xl font-medium transition-all duration-300 ${
-                  activeTab === 'emotion'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-50'
-                }`}
-              >
-                <span>📷</span>
-                <span>Face Emotion Detection</span>
-              </button>
             </div>
             
             {/* Floating elements */}
@@ -129,7 +121,7 @@ export default function Homepage() {
               <MoodQuestionnaire 
                 onSubmit={(report) => {
                   console.log('Mood report:', report)
-                  setShowQuestionnaire(false)
+                  // Keep modal open so the in-component report is visible
                 }} 
               />
             </div>
@@ -137,74 +129,55 @@ export default function Homepage() {
         </div>
       )}
 
-      {activeTab === 'emotion' && (
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="card p-6">
-            <FaceEmotionDetector onEmotionDetected={handleEmotionDetected} />
+      {/* Motivational Quotes Carousel */}
+      <div className="overflow-hidden bg-gradient-to-r from-purple-100 via-pink-100 to-blue-100 rounded-2xl p-8">
+        <h3 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Daily Motivation
+        </h3>
+        <div className="relative">
+          <div className="flex animate-scroll space-x-6">
+            {[
+              "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
+              "It's okay to not be okay. What's important is that you're trying.",
+              "Healing is not linear. Be patient with yourself.",
+              "You are stronger than you think. You are braver than you believe.",
+              "Small steps every day lead to big changes over time.",
+              "Your feelings are valid. You deserve to be heard and understood.",
+              "Taking care of yourself is productive. Rest is not laziness.",
+              "Progress, not perfection. Every step forward counts.",
+              "You are worthy of love, happiness, and peace of mind.",
+              "Tomorrow is a new day with new possibilities."
+            ].concat([
+              "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
+              "It's okay to not be okay. What's important is that you're trying.",
+              "Healing is not linear. Be patient with yourself.",
+              "You are stronger than you think. You are braver than you believe.",
+              "Small steps every day lead to big changes over time.",
+              "Your feelings are valid. You deserve to be heard and understood.",
+              "Taking care of yourself is productive. Rest is not laziness.",
+              "Progress, not perfection. Every step forward counts.",
+              "You are worthy of love, happiness, and peace of mind.",
+              "Tomorrow is a new day with new possibilities."
+            ]).map((quote, index) => (
+              <div 
+                key={index}
+                className="flex-shrink-0 w-80 h-48 bg-white rounded-xl shadow-lg p-6 flex items-center justify-center border-2 border-purple-200"
+              >
+                <p className="text-center text-gray-700 font-medium leading-relaxed">
+                  "{quote}"
+                </p>
+              </div>
+            ))}
           </div>
-          
-          {emotionReport && (
-            <div className="card p-8 animate-slideIn">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xl">📊</span>
-                </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Emotion Analysis Report
-                </h3>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
-                  <h4 className="font-semibold text-gray-700 mb-2">Detected Emotion:</h4>
-                  <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent capitalize">
-                    {emotionReport.emotion}
-                  </p>
-                </div>
-
-                <div className="bg-gray-50 p-6 rounded-xl">
-                  <h4 className="font-semibold text-gray-700 mb-4 flex items-center space-x-2">
-                    <span>💡</span>
-                    <span>Suggested Activities:</span>
-                  </h4>
-                  <ul className="space-y-3">
-                    {emotionReport.activities.map((activity, index) => (
-                      <li key={index} className="flex items-center space-x-3 text-gray-700">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>{activity}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {emotionReport.professionalHelp && (
-                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border-l-4 border-yellow-400 p-6 rounded-xl">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-2xl">⚠️</span>
-                      <h4 className="font-semibold text-yellow-800">Consider Professional Help</h4>
-                    </div>
-                    <p className="text-yellow-700">
-                      Based on your emotional state, you might benefit from speaking with a mental health professional.
-                    </p>
-                  </div>
-                )}
-
-                <button
-                  onClick={() => setEmotionReport(null)}
-                  className="w-full btn-secondary flex items-center justify-center space-x-2"
-                >
-                  <span>🗑️</span>
-                  <span>Clear Report</span>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
-      )}
+      </div>
 
       {/* Enhanced Features Overview */}
       <div className="grid md:grid-cols-3 gap-8">
-        <div className="card p-8 text-center interactive-hover group">
+        <div 
+          className="card p-8 text-center interactive-hover group cursor-pointer"
+          onClick={() => navigate('/face-mood')}
+        >
           <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
             <span className="text-2xl">📊</span>
           </div>
@@ -214,7 +187,10 @@ export default function Homepage() {
           </p>
         </div>
         
-        <div className="card p-8 text-center interactive-hover group">
+        <div 
+          className="card p-8 text-center interactive-hover group cursor-pointer"
+          onClick={() => navigate('/therapy')}
+        >
           <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
             <span className="text-2xl">🤖</span>
           </div>
@@ -224,7 +200,10 @@ export default function Homepage() {
           </p>
         </div>
         
-        <div className="card p-8 text-center interactive-hover group">
+        <div 
+          className="card p-8 text-center interactive-hover group cursor-pointer"
+          onClick={() => navigate('/appointments')}
+        >
           <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
             <span className="text-2xl">🏥</span>
           </div>

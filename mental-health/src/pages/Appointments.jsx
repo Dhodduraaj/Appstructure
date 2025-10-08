@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { moodApi } from '../lib/api'
 
 const psychiatrists = [
-  { id: 1, name: 'Dr. Sarah Johnson', specialty: 'Anxiety & Depression', rating: 4.8, experience: '8 years' },
-  { id: 2, name: 'Dr. Michael Chen', specialty: 'Trauma & PTSD', rating: 4.9, experience: '12 years' },
-  { id: 3, name: 'Dr. Emily Rodriguez', specialty: 'Bipolar Disorder', rating: 4.7, experience: '6 years' },
-  { id: 4, name: 'Dr. James Wilson', specialty: 'Addiction & Recovery', rating: 4.6, experience: '10 years' },
-  { id: 5, name: 'Dr. Lisa Thompson', specialty: 'Child & Adolescent', rating: 4.9, experience: '15 years' }
+  { id: 1, name: 'Dr. Sarah Johnson', specialty: 'Anxiety & Depression', rating: 4.8, experience: '8 years', bookingUrl: 'https://www.zocdoc.com/telehealth' },
+  { id: 2, name: 'Dr. Michael Chen', specialty: 'Trauma & PTSD', rating: 4.9, experience: '12 years', bookingUrl: 'https://www.zocdoc.com/telehealth' },
+  { id: 3, name: 'Dr. Emily Rodriguez', specialty: 'Bipolar Disorder', rating: 4.7, experience: '6 years', bookingUrl: 'https://www.zocdoc.com/telehealth' },
+  { id: 4, name: 'Dr. James Wilson', specialty: 'Addiction & Recovery', rating: 4.6, experience: '10 years', bookingUrl: 'https://www.zocdoc.com/telehealth' },
+  { id: 5, name: 'Dr. Lisa Thompson', specialty: 'Child & Adolescent', rating: 4.9, experience: '15 years', bookingUrl: 'https://www.zocdoc.com/telehealth' }
 ]
 
 const timeSlots = [
@@ -20,6 +20,10 @@ export default function Appointments() {
   const [appointments, setAppointments] = useState([])
   const [showBooking, setShowBooking] = useState(false)
   const [bookingStep, setBookingStep] = useState(1)
+  const [sessionMode, setSessionMode] = useState('online') // 'online' | 'in_person'
+  const [notes, setNotes] = useState('')
+  const [providerUrl, setProviderUrl] = useState('')
+  const [showProvider, setShowProvider] = useState(false)
 
   useEffect(() => {
     // Load existing appointments from localStorage
@@ -35,6 +39,12 @@ export default function Appointments() {
     localStorage.setItem('appointments', JSON.stringify(newAppointments))
   }
 
+  const deleteAppointment = (id) => {
+    const newAppointments = appointments.filter(apt => apt.id !== id)
+    setAppointments(newAppointments)
+    localStorage.setItem('appointments', JSON.stringify(newAppointments))
+  }
+
   const handleBooking = () => {
     if (!selectedPsychiatrist || !selectedDate || !selectedTime) return
 
@@ -44,6 +54,9 @@ export default function Appointments() {
       date: selectedDate,
       time: selectedTime,
       status: 'confirmed',
+      mode: sessionMode,
+      joinUrl: sessionMode === 'online' ? `https://meet.jit.si/MindEase-${Date.now()}` : '',
+      notes,
       createdAt: new Date().toISOString()
     }
 
@@ -53,6 +66,8 @@ export default function Appointments() {
     setSelectedPsychiatrist(null)
     setSelectedDate('')
     setSelectedTime('')
+    setSessionMode('online')
+    setNotes('')
   }
 
   const getAvailableDates = () => {
@@ -85,6 +100,69 @@ export default function Appointments() {
           Choose from our carefully selected team of psychiatrists and therapists.
         </p>
       </div>
+
+      {/* Real Provider Options (External) */}
+      <div className="card p-6">
+        <h3 className="text-xl font-semibold mb-4">Find Licensed Psychiatrists (Online)</h3>
+        <p className="text-gray-600 mb-4">Book with real providers on trusted platforms. These links open official websites.</p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <a className="p-4 border-2 rounded-xl hover:shadow-md transition flex items-start gap-3 cursor-pointer" href="https://www.zocdoc.com/psychiatrists" onClick={(e)=>{e.preventDefault(); setProviderUrl('https://www.zocdoc.com/psychiatrists'); setShowProvider(true);}}>
+            <span className="text-2xl">🌐</span>
+            <div>
+              <div className="font-semibold text-gray-800">Zocdoc – Psychiatrists</div>
+              <div className="text-sm text-gray-600">Search and book online sessions with psychiatrists near you</div>
+            </div>
+          </a>
+          <a className="p-4 border-2 rounded-xl hover:shadow-md transition flex items-start gap-3 cursor-pointer" href="https://www.teladoc.com/what-we-treat/mental-health/" onClick={(e)=>{e.preventDefault(); setProviderUrl('https://www.teladoc.com/what-we-treat/mental-health/'); setShowProvider(true);}}>
+            <span className="text-2xl">📱</span>
+            <div>
+              <div className="font-semibold text-gray-800">Teladoc – Mental Health</div>
+              <div className="text-sm text-gray-600">Virtual psychiatry and therapy sessions</div>
+            </div>
+          </a>
+          <a className="p-4 border-2 rounded-xl hover:shadow-md transition flex items-start gap-3 cursor-pointer" href="https://www.amwell.com/psychiatry/" onClick={(e)=>{e.preventDefault(); setProviderUrl('https://www.amwell.com/psychiatry/'); setShowProvider(true);}}>
+            <span className="text-2xl">💻</span>
+            <div>
+              <div className="font-semibold text-gray-800">Amwell – Psychiatry</div>
+              <div className="text-sm text-gray-600">Psychiatry appointments online</div>
+            </div>
+          </a>
+          <a className="p-4 border-2 rounded-xl hover:shadow-md transition flex items-start gap-3 cursor-pointer" href="https://www.mdlive.com/behavioral-health/" onClick={(e)=>{e.preventDefault(); setProviderUrl('https://www.mdlive.com/behavioral-health/'); setShowProvider(true);}}>
+            <span className="text-2xl">🩺</span>
+            <div>
+              <div className="font-semibold text-gray-800">MDLIVE – Behavioral Health</div>
+              <div className="text-sm text-gray-600">Psychiatrists and therapists via video</div>
+            </div>
+          </a>
+        </div>
+        <p className="text-xs text-gray-500 mt-3">Note: Availability depends on your region and insurance. MindEase is not affiliated with these providers.</p>
+      </div>
+
+      {showProvider && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl h-[85vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-3 border-b">
+              <div className="text-sm text-gray-600 truncate">{providerUrl}</div>
+              <div className="flex items-center gap-2">
+                <a href={providerUrl} target="_blank" rel="noreferrer" className="px-3 py-1 bg-blue-600 text-white rounded text-sm">Open in new tab</a>
+                <button onClick={()=>setShowProvider(false)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200">×</button>
+              </div>
+            </div>
+            <div className="flex-1 relative">
+              <iframe
+                title="Provider"
+                src={providerUrl}
+                className="absolute inset-0 w-full h-full"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute bottom-0 left-0 right-0 p-2 text-center text-xs text-gray-500 bg-white/80">
+                If the site doesn't display, it may block embedding. Use “Open in new tab”.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Enhanced New Appointment Button */}
       <div className="flex justify-center">
@@ -174,6 +252,21 @@ export default function Appointments() {
                   <h4 className="text-2xl font-bold text-gray-800 mb-2">Step 2: Select Date & Time</h4>
                   <p className="text-gray-600">Choose your preferred appointment slot</p>
                 </div>
+                <div>
+                  <label className="block text-lg font-semibold text-gray-700 mb-3">🖥️ Session Mode:</label>
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setSessionMode('online')}
+                      className={`px-4 py-2 rounded-xl border-2 ${sessionMode==='online' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200'}`}
+                    >Online (Video)</button>
+                    <button
+                      type="button"
+                      onClick={() => setSessionMode('in_person')}
+                      className={`px-4 py-2 rounded-xl border-2 ${sessionMode==='in_person' ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200'}`}
+                    >In-person</button>
+                  </div>
+                </div>
                 
                 <div>
                   <label className="block text-lg font-semibold text-gray-700 mb-3">📅 Available Dates:</label>
@@ -213,6 +306,17 @@ export default function Appointments() {
                       </button>
                     ))}
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-lg font-semibold text-gray-700 mb-3">📝 Notes (optional):</label>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    rows={3}
+                    className="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all duration-300"
+                    placeholder="Add anything you'd like your doctor to know in advance"
+                  />
                 </div>
 
                 <div className="flex gap-4">
@@ -280,9 +384,13 @@ export default function Appointments() {
                         <span className="text-lg">🕐</span>
                         <span className="font-medium">{appointment.time}</span>
                       </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-lg">🖥️</span>
+                    <span className="font-medium capitalize">{appointment.mode === 'online' ? 'Online' : 'In-person'}</span>
+                  </div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="flex flex-col items-end space-y-3">
                     <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
                       appointment.status === 'confirmed' 
                         ? 'bg-green-100 text-green-800 border border-green-200'
@@ -290,6 +398,39 @@ export default function Appointments() {
                     }`}>
                       {appointment.status}
                     </span>
+                {appointment.mode === 'online' && appointment.joinUrl && (
+                  <a
+                    href={appointment.joinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2"
+                  >
+                    <span>🔗</span>
+                    <span>Join Online Session</span>
+                  </a>
+                )}
+                {appointment.psychiatrist.bookingUrl && (
+                  <a
+                    href={appointment.psychiatrist.bookingUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2"
+                  >
+                    <span>🌐</span>
+                    <span>Book with Provider</span>
+                  </a>
+                )}
+                    <button
+                      onClick={() => {
+                        if (confirm('Are you sure you want to delete this appointment?')) {
+                          deleteAppointment(appointment.id)
+                        }
+                      }}
+                      className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2"
+                    >
+                      <span>🗑️</span>
+                      <span>Delete</span>
+                    </button>
                   </div>
                 </div>
               </div>

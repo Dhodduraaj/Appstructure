@@ -47,6 +47,20 @@ export const chatApi = {
   },
 }
 
+export const emotionApi = {
+  async analyze(base64Jpeg) {
+    const { data } = await api.post('/emotion', { image: base64Jpeg })
+    return data
+  },
+}
+
+export const questionnaireApi = {
+  async analyze(answers, summary) {
+    const { data } = await api.post('/questionnaire', { answers, summary })
+    return data
+  }
+}
+
 export default api
 
 

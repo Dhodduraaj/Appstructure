@@ -171,53 +171,7 @@ export default function Resources() {
       </div>
 
       {/* ASMR Videos Section */}
-      <div className="card p-8">
-        <div className="flex items-center space-x-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center float-animation">
-            <span className="text-white text-lg">🎧</span>
-          </div>
-          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-            ASMR & Sleep Sounds
-          </h3>
-        </div>
-        <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
-          Gentle sounds and whispered content designed to help you relax, focus, and sleep better.
-        </p>
-        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-          {asmrVideos.map((video, index) => (
-            <div 
-              key={index} 
-              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-purple-300 transition-all duration-300 interactive-hover animate-slideIn bg-white flex-shrink-0 w-80"
-              style={{animationDelay: `${index * 0.1}s`}}
-            >
-              <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center relative overflow-hidden">
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
-                  title={video.title}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                  {video.duration}
-                </div>
-                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-2xl">▶️</span>
-                  </div>
-                </div>
-              </div>
-              <div className="p-4 bg-white">
-                <h4 className="font-semibold text-gray-800 mb-2 group-hover:text-purple-600 transition-colors">{video.title}</h4>
-                <p className="text-sm text-gray-600 leading-relaxed">{video.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      
 
       {/* Relaxing Music Videos */}
       <div className="card p-8">
@@ -268,6 +222,54 @@ export default function Resources() {
         </div>
       </div>
 
+      <div className="card p-8">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center float-animation">
+            <span className="text-white text-lg">🎧</span>
+          </div>
+          <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            ASMR & Sleep Sounds
+          </h3>
+        </div>
+        <p className="text-gray-600 mb-6 text-center max-w-2xl mx-auto">
+          Gentle sounds and whispered content designed to help you relax, focus, and sleep better.
+        </p>
+        <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          {asmrVideos.map((video, index) => (
+            <div 
+              key={index} 
+              className="group border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-purple-300 transition-all duration-300 interactive-hover animate-slideIn bg-white flex-shrink-0 w-80"
+              style={{animationDelay: `${index * 0.1}s`}}
+            >
+              <div className="aspect-video bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center relative overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                  title={video.title}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
+                  {video.duration}
+                </div>
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                  <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-2xl">▶️</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 bg-white">
+                <h4 className="font-semibold text-gray-800 mb-2 group-hover:text-purple-600 transition-colors">{video.title}</h4>
+                <p className="text-sm text-gray-600 leading-relaxed">{video.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
       {/* Enhanced Relaxation Videos */}
       <div className="card p-8">
         <div className="flex items-center space-x-3 mb-6">

@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom'
 import Resources from './pages/Resources'
-import Therapy from './pages/Therapy'
+import TherapyNew from './pages/TherapyNew'
 import Activities from './pages/Activities'
 import Auth from './pages/Auth'
 import Homepage from './pages/Homepage'
 import Appointments from './pages/Appointments'
+import FaceMoodDetection from './pages/FaceMoodDetection'
 import { useEffect, useState } from 'react'
 import { isLoggedIn, setToken } from './lib/auth'
+import Locator from './pages/Locator'
+
 
 function Layout({ children }) {
   const [logged, setLogged] = useState(isLoggedIn())
@@ -52,9 +55,9 @@ function Layout({ children }) {
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200' 
           : 'bg-white/70 backdrop-blur-sm'
       }`}>
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="w-full px-4 py-4 flex items-center justify-between gap-4">
           {/* Logo with animation */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-none">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center float-animation">
               <span className="text-white font-bold text-lg">M</span>
             </div>
@@ -63,13 +66,13 @@ function Layout({ children }) {
             </h1>
           </div>
           
-          {/* Enhanced Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          {/* Enhanced Navigation - extended width, single line, scrollable if overflow */}
+          <nav className="hidden md:flex items-center space-x-2 flex-1 justify-center overflow-x-auto whitespace-nowrap px-8">
             <NavLink 
               to="/" 
               end 
               className={({isActive}) => 
-                `px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
                   isActive 
                     ? 'bg-blue-100 text-blue-700 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -81,7 +84,7 @@ function Layout({ children }) {
             <NavLink 
               to="/appointments" 
               className={({isActive}) => 
-                `px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
                   isActive 
                     ? 'bg-blue-100 text-blue-700 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -93,7 +96,7 @@ function Layout({ children }) {
             <NavLink 
               to="/resources" 
               className={({isActive}) => 
-                `px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
                   isActive 
                     ? 'bg-blue-100 text-blue-700 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -105,7 +108,7 @@ function Layout({ children }) {
             <NavLink 
               to="/therapy" 
               className={({isActive}) => 
-                `px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
                   isActive 
                     ? 'bg-blue-100 text-blue-700 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -117,7 +120,7 @@ function Layout({ children }) {
             <NavLink 
               to="/activities" 
               className={({isActive}) => 
-                `px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
                   isActive 
                     ? 'bg-blue-100 text-blue-700 shadow-sm' 
                     : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -126,10 +129,34 @@ function Layout({ children }) {
             >
               🎮 Activities
             </NavLink>
+            <NavLink 
+              to="/face-mood" 
+              className={({isActive}) => 
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-blue-100 text-blue-700 shadow-sm' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`
+              }
+            >
+              📸 Face Mood
+            </NavLink>
+            <NavLink 
+              to="/locator" 
+              className={({isActive}) => 
+                `px-3 py-2 rounded-lg font-medium transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-blue-100 text-blue-700 shadow-sm' 
+                    : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                }`
+              }
+            >
+              📍 Locator
+            </NavLink>
           </nav>
 
           {/* Auth Button */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 flex-none">
             {!logged ? (
               <NavLink 
                 to="/auth" 
@@ -216,16 +243,18 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Layout>
         <Routes>
           <Route path="/auth" element={<Auth/>} />
           <Route path="/" element={<ProtectedRoute><Homepage/></ProtectedRoute>} />
           <Route path="/appointments" element={<ProtectedRoute><Appointments/></ProtectedRoute>} />
           <Route path="/resources" element={<ProtectedRoute><Resources/></ProtectedRoute>} />
-          <Route path="/therapy" element={<ProtectedRoute><Therapy/></ProtectedRoute>} />
+          <Route path="/therapy" element={<ProtectedRoute><TherapyNew/></ProtectedRoute>} />
           <Route path="/activities" element={<ProtectedRoute><Activities/></ProtectedRoute>} />
-        </Routes>
+          <Route path="/face-mood" element={<ProtectedRoute><FaceMoodDetection/></ProtectedRoute>} />
+          <Route path="/locator" element={<ProtectedRoute><Locator/></ProtectedRoute>} />
+          </Routes>
       </Layout>
     </BrowserRouter>
   )

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { setToken, isLoggedIn } from '../lib/auth'
+import { useNavigate } from 'react-router-dom'
 
 export default function Auth() {
   const [mode, setMode] = useState('login')
@@ -8,6 +9,7 @@ export default function Auth() {
   const [displayName, setDisplayName] = useState('')
   const [error, setError] = useState('')
   const [logged, setLogged] = useState(isLoggedIn())
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handler = () => setLogged(isLoggedIn())
@@ -27,6 +29,7 @@ export default function Auth() {
         // Create a simple token for demo
         const token = btoa(JSON.stringify({ email, displayName, timestamp: Date.now() }))
         setToken(token)
+        navigate('/')
       } else {
         if (!email || !password) {
           setError('Please fill in all fields')
@@ -35,6 +38,7 @@ export default function Auth() {
         // For login, just create a token (in real app, this would verify credentials)
         const token = btoa(JSON.stringify({ email, timestamp: Date.now() }))
         setToken(token)
+        navigate('/')
       }
     } catch (e) {
       setError('Authentication failed')
