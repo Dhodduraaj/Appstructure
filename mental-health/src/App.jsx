@@ -9,6 +9,7 @@ import FaceMoodDetection from './pages/FaceMoodDetection'
 import { useEffect, useState } from 'react'
 import { isLoggedIn, setToken } from './lib/auth'
 import Locator from './pages/Locator'
+import Doctor from './pages/Doctor'
 
 
 function Layout({ children }) {
@@ -254,6 +255,7 @@ export default function App() {
           <Route path="/activities" element={<ProtectedRoute><Activities/></ProtectedRoute>} />
           <Route path="/face-mood" element={<ProtectedRoute><FaceMoodDetection/></ProtectedRoute>} />
           <Route path="/locator" element={<ProtectedRoute><Locator/></ProtectedRoute>} />
+          <Route path="/doctor" element={<ProtectedRoute><Doctor/></ProtectedRoute>} />
           </Routes>
       </Layout>
     </BrowserRouter>

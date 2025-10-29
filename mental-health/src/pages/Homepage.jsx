@@ -134,8 +134,8 @@ export default function Homepage() {
         <h3 className="text-2xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
           Daily Motivation
         </h3>
-        <div className="relative">
-          <div className="flex animate-scroll space-x-6">
+        <div className="relative overflow-hidden">
+          <div className="flex animate-scroll space-x-6 w-[200%]">
             {[
               "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
               "It's okay to not be okay. What's important is that you're trying.",
