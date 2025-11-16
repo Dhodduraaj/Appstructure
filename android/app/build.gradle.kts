@@ -27,13 +27,13 @@ android {
         versionName = flutter.versionName
     }
 
-    // ✅ Add this block
+    // ✅ Signing config in Kotlin DSL (Correct syntax)
     signingConfigs {
         create("release") {
-            storeFile = file("my-release-key.jks")
-            storePassword = "cool@010" // replace
-            keyAlias = "my-key-alias"              // replace
-            keyPassword = "cool@010"     // replace
+            storeFile = file("app-release.keystore")   // change if needed
+            storePassword = "dhoddu"                 // replace
+            keyAlias = "upload"                        // replace
+            keyPassword = "dhoddu"                   // replace
         }
     }
 

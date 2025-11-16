@@ -11,12 +11,26 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: AuthPage(
+        onThemeToggle: () {
+          setState(() {
+            isDarkMode = !isDarkMode;
+          });
+        },
+      ),
     );
   }
 }
